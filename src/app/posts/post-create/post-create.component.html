@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-form-field>
+    <input matInput type="text" [(ngModel)]="enteredTitle">
+  </mat-form-field>
+
+  <mat-form-field>
+    <!-- Below using ngModel for 2 ways binding feature -->
+    <textarea matInput rows="6" [(ngModel)]="enteredContent" #postInput></textarea> <!--Target the value property of the underlying object and abind the value between the quotation marks to it; and display in the frontend? So this value right now is in TS code-->
+  <!--If just the Test itself, it will look for the 'Test' properties in the component-->
+  </mat-form-field>
+  <button mat-raised-button
+  color="primary"
+  (click)="onAddPost()">Save Post</button> <!--This listen to the event (map to the function in .ts file) click the button-->
+</mat-card>
+
+
+<!-- <p>{{ newPost }}</p> Return the newPost properties in the class in .ts file. This is tring interpolation, for output the content -->
+

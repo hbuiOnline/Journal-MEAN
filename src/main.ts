@@ -1,3 +1,5 @@
+//This is the one where angular execute it first
+
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
@@ -8,5 +10,6 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule) //Mainly executing this line
+                                                    //Tell the angular to execute the AppModule
   .catch(err => console.error(err));
