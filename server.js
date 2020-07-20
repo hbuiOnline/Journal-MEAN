@@ -44,7 +44,7 @@ const onListening = () => {
   debug("Listening on " + bind);
 };
 
-const port = normalizePort(process.env.PORT || "3000"); //Either env PORT in Node.js or Listen to port 3000 to hosting the server
+const port = normalizePort(process.env.PORT || 3000); //Either env PORT in Node.js or Listen to port 3000 to hosting the server
 app.set("port", port);
 
 const server = http.createServer(app);

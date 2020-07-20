@@ -8,6 +8,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; //Linking the file path
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'; //For ngModule
+import { HttpClientModule } from '@angular/common/http';
+
 import { MatInputModule } from '@angular/material/input'; //Material module
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,7 +37,8 @@ import { PostListComponent } from './posts/post-list/post-list.component';
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
-    MatExpansionModule
+    MatExpansionModule,
+    HttpClientModule
 
   ],
   providers: [],
