@@ -2,6 +2,7 @@ import { Post } from './post.model'
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
@@ -11,9 +12,21 @@ export class PostsService {
   constructor(private http : HttpClient) {}
 
   getPosts(){
-      this.http.get<{message: string, posts: Post[]}>('http://localhost:3000/api/posts')
-      .subscribe((postData) => {
-        this.posts = postData.posts; //Coming from the server
+      this.http.get<{message: string; posts: any}>(
+        'http://localhost:3000/api/posts'
+        )
+      .pipe(map((postData) => {
+        return postData.posts.map(post => {
+          return {
+            title: post.title,
+            content: post.content,
+            id: post._id
+          };
+        }); // Return the array of posts
+      })) //Add in the operator, accept multiple operators
+
+      .subscribe((transformedPosts) => {
+        this.posts = transformedPosts; //Coming from the server
         this.postsUpdated.next([...this.posts]);
       });//3 params, 1st is new data (res), 2nd for error(handling), 3rd is complete
   }
@@ -32,4 +45,11 @@ export class PostsService {
       });
 
   }
-}
+
+  deletePost(postId: string){
+    this.http.delete('http://localhost:3000/api/posts/' + postId)
+      .subscribe(() => {
+        console.log('Deleted!');
+      });
+  }
+}//End of class postsService
