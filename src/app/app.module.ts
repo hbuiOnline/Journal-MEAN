@@ -7,7 +7,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; //Linking the file path
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms'; //For ngModule
+import { ReactiveFormsModule } from '@angular/forms'; //For ngModule
 import { HttpClientModule } from '@angular/common/http';
 
 import { MatInputModule } from '@angular/material/input'; //Material module
@@ -38,7 +38,7 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatCardModule,

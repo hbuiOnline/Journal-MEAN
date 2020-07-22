@@ -13,7 +13,7 @@ import { PostsService } from  '../posts.service';
 export class PostListComponent implements OnInit, OnDestroy {
 
   posts: Post[] = [];
-  isLoading = false;
+  isLoading = false; //For Spinner
   private postsSub: Subscription;
 
   constructor(public postsService: PostsService) {} //public infront will declare/auto create the properties
