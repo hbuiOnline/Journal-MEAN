@@ -1,17 +1,17 @@
 <mat-card>
-  <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form (submit)="onSavePost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
     <mat-form-field>
-      <input matInput
+      <input
+      matInput
       type="text"
       name="title"
-      ngModel
+      [ngModel]="post?.title"
       required
       #title="ngModel"
       placeholder="Title">
       <mat-error *ngIf="title.invalid">Please enter a post title</mat-error>
     </mat-form-field>
-    <!-- [(ngModel)]="enteredTitle"  -->
-    <!-- [(ngModel)]="enteredContent"  -->
 
     <mat-form-field>
       <!-- Below using ngModel for 2 ways binding feature -->
@@ -19,7 +19,7 @@
       matInput
       rows="6"
       name="content"
-      ngModel
+      [ngModel]="post?.content"
       required
       #content="ngModel"
       placeholder="Content"></textarea> <!--Target the value property of the underlying object and abind the value between the quotation marks to it; and display in the frontend? So this value right now is in TS code-->
