@@ -9,26 +9,32 @@ import { Router } from '@angular/router';
 @Injectable({ providedIn: 'root' })
 export class PostsService {
   private posts : Post[] = [];
-  private postsUpdated = new Subject<Post[]>();
+  private postsUpdated = new Subject<{ posts: Post[], postCount: number }>();
 
   constructor(private http : HttpClient, private router: Router) {}
 
-  getPosts(){ //Get multiple posts
-      this.http.get<{message: string; posts: any}>('http://localhost:3000/api/posts')
+  getPosts(postsPerPage: number, currentPage: number){ //Get multiple posts
+      const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`; //This type of string is able to add value within the string
+      this.http
+      .get<{message: string; posts: any, maxPosts: number}>('http://localhost:3000/api/posts' + queryParams)
       .pipe(map((postData) => {
-        return postData.posts.map(post => {
-          return {
-            title: post.title,
-            content: post.content,
-            id: post._id,
-            imagePath: post.imagePath
-          };
-        }); // Return the array of posts
+          return {posts: postData.posts.map(post => {
+            return {
+              title: post.title,
+              content: post.content,
+              id: post._id,
+              imagePath: post.imagePath
+            };
+          }), maxPosts: postData.maxPosts
+        }; // Return the array of posts
       })) //Add in the operator, accept multiple operators
 
-      .subscribe((transformedPosts) => {
-        this.posts = transformedPosts; //Coming from the server
-        this.postsUpdated.next([...this.posts]);
+      .subscribe((transformedPostData) => {
+        this.posts = transformedPostData.posts; //Coming from the server
+        this.postsUpdated.next({
+          posts: [...this.posts],
+          postCount: transformedPostData.maxPosts
+        });
       });//3 params, 1st is new data (res), 2nd for error(handling), 3rd is complete
   }
 
@@ -52,16 +58,6 @@ export class PostsService {
     this.http
       .post<{message: string, post: Post}>('http://localhost:3000/api/posts', postData)
       .subscribe((responseData) => {
-        const post: Post = {
-          id: responseData.post.id,
-          title: title,
-          content: content,
-          imagePath: responseData.post.imagePath
-        };
-        // const id = responseData.postId;
-        // post.id = id; //Update the id retrieved from responseData
-        this.posts.push(post);
-        this.postsUpdated.next([...this.posts]); //Push the copy of the posts[], afted updated
         this.router.navigate(['/']);//navigate back to root page
       });
   }//End addPost
@@ -85,30 +81,11 @@ export class PostsService {
     }
     this.http.put('http://localhost:3000/api/posts/' + id, postData)
       .subscribe(response => {
-        //Content 68
-        const updatedPosts = [...this.posts];
-        const oldPostIndex = updatedPosts.findIndex(p => p.id === id);
-        const post: Post = {
-          id: id,
-          title: title,
-          content: content,
-          imagePath: ""
-        };
-        updatedPosts[oldPostIndex] = post;
-        this.posts = updatedPosts;
-        this.postsUpdated.next([...this.posts]);
         this.router.navigate(['/']); //navigate back to root page
       });
   }
 
   deletePost(postId: string){
-    this.http.delete('http://localhost:3000/api/posts/' + postId) //Dynamic paramater
-      .subscribe(() => {
-        // console.log('Deleted!');
-        const updatedPosts = this.posts.filter(post => post.id !== postId); //Filter allow us to return subset of that post array, if return T, element will be kept, if F, the element will not be part of filtered array
-        this.posts = updatedPosts;
-        this.postsUpdated.next([...this.posts]);
-
-      });
+   return this.http.delete('http://localhost:3000/api/posts/' + postId); //Dynamic paramater
   }//End of deletePost
 }//End of class postsService

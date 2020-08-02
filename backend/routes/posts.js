@@ -82,13 +82,27 @@ router.put(
 );
 
 router.get("", (req, res, next) => { //target the path to reach the code inside app.use
-  Post.find().then(documents => {  //This will return all results
-    // console.log(documents);
-    res.status(200).json({
-      message: "Posts fetched successfully!",
-      posts: documents
+  const pageSize = +req.query.pagesize; //+ in front to convert string to numeric
+  const currentPage = +req.query.page;
+  const postQuery = Post.find();
+  let fetchedPosts;
+  if (pageSize && currentPage) {
+    postQuery
+    .skip(pageSize * (currentPage - 1)) // will not retrieve all the element we find
+    .limit(pageSize);
+  }
+  postQuery
+    .then(documents => {  //This will return all results
+      fetchedPosts = documents;
+      return Post.count();
+    })
+    .then(count => {
+        res.status(200).json({
+        message: "Posts fetched successfully!",
+        posts: fetchedPosts,
+        maxPosts: count
+      });
     });
-  });
 });
 
 router.get("/:id", (req, res, next) => {
