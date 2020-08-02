@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express"); //Initilize express
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -19,16 +20,26 @@ mongoose
 
 app.use(bodyParser.json()); //bodyParser can parse different kind of body
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use("/images", express.static(path.join("backend/images"))); //allow to continue and fetch the file from here
 
+//npm install --save multer
+//extract incoming file package
 
-app.use((req,res,next) => { //Middleware need to have a next() to move on to the next response
-  res.setHeader('Access-Control-Allow-Origin', '*'); //Allow which domain are allow (which is all in this case b/c of '*')
-  res.setHeader('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-Type, Accept'); //Domain sending requests with a certain set of headers besides the default headers
-  res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, PATCH, DELETE, OPTIONS');
+app.use((req, res, next) => { //Middleware need to have a next() to move on to the next response
+  res.setHeader("Access-Control-Allow-Origin", "*"); //Allow which domain are allow (which is all in this case b/c of '*')
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  //Domain sending requests with a certain set of headers besides the default headers
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+  );
   next();
 });
 
-app.use('/api/posts', postsRoutes);
+app.use("/api/posts", postsRoutes);
 
 module.exports = app;
 
