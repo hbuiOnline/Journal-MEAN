@@ -7,12 +7,12 @@ textarea {
   width: 100%;
 }
 
-button {
-  margin-top: 1rem;
-}
-
 mat-spinner {
   margin: auto;
+}
+
+button {
+  margin-top: 1rem;
 }
 
 input[type="file"]{

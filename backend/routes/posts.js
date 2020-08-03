@@ -3,6 +3,7 @@ const express = require("express");
 const multer = require("multer");
 
 const Post = require("../models/post");
+const checkAuth = require('../middleware/check-auth')
 
 const router = express.Router();
 
@@ -33,6 +34,7 @@ const storage = multer.diskStorage({ //Define where multer should put files, con
 
 router.post(
   "",
+  checkAuth,  //Run this before
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     const url = req.protocol + "://" + req.get("host"); // construct url to our server
@@ -60,6 +62,7 @@ router.post(
 //patch: only update the resource with the new value
 router.put(
   "/:id",
+  checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => { //Put the new resource and completely replace the old one
     let imagePath = req.body.imagePath;
@@ -115,7 +118,7 @@ router.get("/:id", (req, res, next) => {
   });
 });
 
-router.delete("/:id", (req, res, next) => { //access to an id property dynamically, id was received as part of the URL
+router.delete("/:id", checkAuth, (req, res, next) => { //access to an id property dynamically, id was received as part of the URL
   Post.deleteOne({ _id: req.params.id }).then(result => {//DeleteOne operation where we passed JS object inside the {}
     console.log(result);
     res.status(200).json({ message: "Post deleted!" });

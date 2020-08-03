@@ -3,7 +3,8 @@ const express = require("express"); //Initilize express
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const postsRoutes = require('./routes/posts');
+const postsRoutes = require("./routes/posts");
+const userRoutes = require("./routes/user");
 
 const app = express(); //Calling express framework assign and using through 'app'
 
@@ -40,6 +41,8 @@ app.use((req, res, next) => { //Middleware need to have a next() to move on to t
 });
 
 app.use("/api/posts", postsRoutes);
+app.use("/api/user", userRoutes);
+
 
 module.exports = app;
 
