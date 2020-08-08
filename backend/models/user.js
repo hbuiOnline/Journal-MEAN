@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const uniqueValidator = require('mongoose-unique-validator'); //3rd party plugin
+const uniqueValidator = require("mongoose-unique-validator"); //3rd party plugin
 
 const userSchema = mongoose.Schema({ //In JS, uppercase S, typescript use lowercase s
-  email: { type: String, required: true, unique: true},
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true }
 });
 

@@ -8,7 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; //Linking the file path
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'; //For ngModule
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { MatInputModule } from '@angular/material/input'; //Material module
 import { MatCardModule } from '@angular/material/card';
@@ -28,6 +28,7 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
+import { AuthInterceptor } from './auth/auth-inteceptor';
 
 
 @NgModule({
@@ -58,7 +59,9 @@ import { SignupComponent } from './auth/signup/signup.component';
     HttpClientModule
 
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent] //Adding the bootstrap array, tell the angular it should search the index.html file
                             //For the AppComponent identified by its selector
 })

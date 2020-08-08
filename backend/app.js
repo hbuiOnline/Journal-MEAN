@@ -8,6 +8,7 @@ const userRoutes = require("./routes/user");
 
 const app = express(); //Calling express framework assign and using through 'app'
 
+
 mongoose
   .connect(
     'mongodb+srv://han:Hviponlin3@cluster0.4uy0y.mongodb.net/node-angular?retryWrites=true&w=majority',{useUnifiedTopology: true, useNewUrlParser: true}
@@ -30,9 +31,10 @@ app.use((req, res, next) => { //Middleware need to have a next() to move on to t
   res.setHeader("Access-Control-Allow-Origin", "*"); //Allow which domain are allow (which is all in this case b/c of '*')
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  //Domain sending requests with a certain set of headers besides the default headers
+    //Domain sending requests with a certain set of headers besides the default headers
+
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PATCH, PUT, DELETE, OPTIONS"
@@ -43,19 +45,4 @@ app.use((req, res, next) => { //Middleware need to have a next() to move on to t
 app.use("/api/posts", postsRoutes);
 app.use("/api/user", userRoutes);
 
-
 module.exports = app;
-
-//dummy data
-// const posts = [
-  //   {
-  //   id: 'fadf12312',
-  //   title:'First serve-side post',
-  //   content:'This is coming from the server!'
-  //   },
-  //   {
-  //     id:'dsadsadas',
-  //     title:'Second serve-side post',
-  //     content:'This is coming from the server!'
-  //   }
-  // ];

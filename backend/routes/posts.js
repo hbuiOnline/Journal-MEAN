@@ -3,7 +3,7 @@ const express = require("express");
 const multer = require("multer");
 
 const Post = require("../models/post");
-const checkAuth = require('../middleware/check-auth')
+const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
@@ -34,7 +34,7 @@ const storage = multer.diskStorage({ //Define where multer should put files, con
 
 router.post(
   "",
-  checkAuth,  //Run this before
+  checkAuth,//Run this before
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     const url = req.protocol + "://" + req.get("host"); // construct url to our server
@@ -57,7 +57,6 @@ router.post(
     }); //Save the data as a query to the database
   }
 );
-
 //Content 67
 //patch: only update the resource with the new value
 router.put(
@@ -68,7 +67,7 @@ router.put(
     let imagePath = req.body.imagePath;
     if (req.file) {
       const url = req.protocol + "://" + req.get("host");
-      imagePath = url + "/images/" + req.file.filename
+      imagePath = url + "/images/" + req.file.filename;
     }
     const post = new Post({
       _id: req.body.id,
@@ -78,7 +77,6 @@ router.put(
     });
     console.log(post);
     Post.updateOne({ _id: req.params.id }, post).then(result => {
-      // console.log(result);
       res.status(200).json({ message: "Update successful!" });
     });
   }
@@ -90,17 +88,15 @@ router.get("", (req, res, next) => { //target the path to reach the code inside 
   const postQuery = Post.find();
   let fetchedPosts;
   if (pageSize && currentPage) {
-    postQuery
-    .skip(pageSize * (currentPage - 1)) // will not retrieve all the element we find
-    .limit(pageSize);
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize); // will not retrieve all the element we find
   }
   postQuery
-    .then(documents => {  //This will return all results
+    .then(documents => { //This will return all results
       fetchedPosts = documents;
       return Post.count();
     })
     .then(count => {
-        res.status(200).json({
+      res.status(200).json({
         message: "Posts fetched successfully!",
         posts: fetchedPosts,
         maxPosts: count
@@ -119,7 +115,7 @@ router.get("/:id", (req, res, next) => {
 });
 
 router.delete("/:id", checkAuth, (req, res, next) => { //access to an id property dynamically, id was received as part of the URL
-  Post.deleteOne({ _id: req.params.id }).then(result => {//DeleteOne operation where we passed JS object inside the {}
+  Post.deleteOne({ _id: req.params.id }).then(result => { //DeleteOne operation where we passed JS object inside the {}
     console.log(result);
     res.status(200).json({ message: "Post deleted!" });
   });
